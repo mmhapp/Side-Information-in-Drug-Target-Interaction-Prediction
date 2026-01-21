@@ -1,6 +1,6 @@
 # Side Information in Drug–Target Interaction Prediction
 
-This repository contains the implementation for my **Master of Science (Technology) Thesis** in Biomedical Engineering and Health Technology at the University of Turku. The project focuses on developing a machine learning pipeline for predicting drug–target interactions (DTI) using **Factorization Machines**.
+This repository contains the implementation for my **Master of Science (Technology) Thesis** in Biomedical Engineering and Health Technology at the University of Turku. The project focuses on developing a machine learning pipeline for predicting drug–target interactions (DTI) using **factorisation machines** (FM).
 
 ### 🔍 Project Background
 
@@ -48,11 +48,11 @@ The study demonstrated that integrating side information with binary identifiers
 
 # Side Information in Drug–Target Interaction Prediction
 
-This repository contains the implementation for my Master of Science (Technology) Thesis in Biomedical Engineering and Health Technology at the University of Turku. The project focuses on developing a machine learning pipeline for predicting drug–target interactions (DTI) using Factorization Machines.
+This repository contains the implementation for my Master of Science (Technology) Thesis in Biomedical Engineering and Health Technology at the University of Turku. The project focuses on developing a machine learning pipeline for predicting drug–target interactions (DTI) using factorization machines (FM).
 
 ## 🔍 Project Background
 
-In drug discovery, identifying new interactions experimentally is both costly and time-consuming. This model accelerates the process by predicting affinities (such as Kd or Ki) non-experimentally by leveraging:
+In drug discovery, identifying new interactions experimentally is both costly and time-consuming. This model accelerates the process by predicting affinities (such as $K_d$ or Ki) non-experimentally by leveraging:
 
 1. **Binary Identifiers** (One-Hot Encoding for drugs and targets)
 2. **Side Information** (Chemical similarity matrices and genomic descriptors)
@@ -72,11 +72,11 @@ In drug discovery, identifying new interactions experimentally is both costly an
 The model is implemented in Python, utilizing the `libFM` library, which is highly efficient for modeling interactions in sparse datasets.
 
 **Dependencies:**
-- Python ≥ 3.7
-- pywFM (Python wrapper for libFM)
-- rlscore (For C-index calculation)
-- scikit-learn (For preprocessing and K-Fold splitting)
-- NumPy
+* `Python ≥ 3.9`
+* `pywFM` (Python wrapper for libFM)
+* `rlscore` (For C-index calculation)
+* `scikit-learn` (For preprocessing and K-Fold splitting)
+* `NumPy`
 
 ## 📊 Key Findings
 
