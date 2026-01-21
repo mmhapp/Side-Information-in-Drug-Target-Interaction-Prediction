@@ -62,8 +62,7 @@ num_cv_folds_split = 3
 
 ## Contact
 
-**Mikko Happonen**  
-University of Turku  
+**MSc (Tech) Mikko Happonen**  
 Supervisors: Assoc. Prof. Antti Airola, MSc Riikka Numminen
 
 ---
