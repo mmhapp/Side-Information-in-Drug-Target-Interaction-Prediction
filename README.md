@@ -21,7 +21,7 @@ In drug discovery, identifying new interactions experimentally is both costly an
 
 ## Technical Implementation
 
-Main code is in fm.py, and the instructions in descriptions.txt. The model is implemented in Python, utilizing the `libFM` library, which is highly efficient for modeling interactions in sparse datasets.
+Main code is in `fm.py`, and the instructions in `descriptions.txt`. The model is implemented in Python, utilizing the `libFM` library, which is highly efficient for modeling interactions in sparse datasets.
 
 **Dependencies:**
 * `Python ≥ 3.9`
