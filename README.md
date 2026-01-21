@@ -78,33 +78,6 @@ The model is implemented in Python, utilizing the `libFM` library, which is high
 - scikit-learn (For preprocessing and K-Fold splitting)
 - NumPy
 
-**Installation:**
-```bash
-pip install numpy scikit-learn pywFM rlscore
-```
-
-Configure the libFM path in the script:
-```python
-os.environ["LIBFM_PATH"] = "/path/to/libfm/bin/"
-```
-
-## 🚀 Usage
-
-Execute the model via command line by specifying the dataset and feature option:
-
-```bash
-# Syntax: python main.py [dataset] [feature_option]
-# feature_option: bi (binary), si (side info), both (combined)
-
-python main.py davis both
-python main.py gpcr si
-python main.py tang bi
-```
-
-**Dataset options:** `davis`, `metz`, `tang` (KIBA), `merget`, `gpcr`, `ic`, `e`
-
-**Feature options:** `bi`, `si`, `both`
-
 ## 📊 Key Findings
 
 The study revealed that **side information does not systematically improve predictions** across all datasets. Key results:
@@ -133,18 +106,6 @@ r2_regularization = 1.0
 candidate_k2_values = [4, 8, 16]
 num_cv_folds_k = 3
 num_cv_folds_split = 3
-```
-
-## 🎓 Citation
-
-```bibtex
-@mastersthesis{happonen2025side,
-  title={Side Information in Drug–Target Interaction Prediction},
-  author={Happonen, Mikko},
-  year={2025},
-  school={University of Turku},
-  type={MSc (Tech) Thesis}
-}
 ```
 
 ## 📧 Contact
