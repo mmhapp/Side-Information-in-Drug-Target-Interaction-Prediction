@@ -2,7 +2,7 @@
 
 This repository contains the implementation for my Master of Science (Technology) Thesis in Biomedical Engineering and Health Technology at the University of Turku. The project focuses on developing a machine learning pipeline for predicting drug–target interactions (DTI) using factorization machines (FM).
 
-## 🔍 Project Background
+## Project Background
 
 In drug discovery, identifying new interactions experimentally is both costly and time-consuming. This model accelerates the process by predicting affinities (such as $K_d$ or $K_i$) non-experimentally by leveraging:
 
