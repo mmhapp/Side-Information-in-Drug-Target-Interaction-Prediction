@@ -1,0 +1,174 @@
+* Instructions to run the DTI prediction model *
+
+To run the FM based DTI prediction model with certain dataset and certain feature option, use command
+
+python fm.py [dataset] [feature_option]
+
+The [dataset] refers to wanted dataset to be used in model
+Options are davis, metz, tang, merget, gpcr, ic, and e from which each correspond to dataset of different type
+
+The [feature_option] refers to wanted features of drug-target data to be used
+Options are bi (only binary identifiers of drugs and targets are used), si (only side information is used), and both (both are used)
+
+To run the FM based DTI prediction model with all seven datasets and all three feature options once, use command
+
+python fmloop.py
+
+To run the FM based DTI prediction model with printed prediction values, use command
+
+python fmpredictions.py [dataset] [feature_option] [file_name]
+
+This way, the prediction values are saved as Results/predictions_file_name.csv
+
+To run the FM based DTI prediction model with saved weights of the trained model, use command
+
+python fmweights.py [dataset] [feature_option] [file_name]
+
+This way, the model's weights are saved as Results/weights_file_name.json
+
+File knn.py is the first iteration of the model
+
+File settings.py defines the hyperparameters during run of the code, for example, for cross-validation and factorisation machine
+
+File Results/results.txt have the results of the model and file Results/statistics.ipynb prints statistics of the results 
+
+File Results/results.py prints the results as LaTeX form based on data in Results/results.csv and
+
+––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————–––
+
+* Description for KNN based DTI prediction model in knn.py with data from Davis et al. *
+
+1. Load data from Davis et al.
+
+XD represents drug-drug similarities
+It is a feature matrix of 68 rows and 68 columns
+Rows represent the drugs (inhibitors) and columns represent the same drugs (inhibitors)
+The first row and first column correspond to the same drug and so on
+Cell represents the similarity between the two drugs
+The values ​​range from 0 to 1, where 1 represents perfect similarity and 0 represents no similarity at all
+The dataset is scaled by multiplying by 100
+
+XT represents target-target similarities
+It is a feature matrix of 442 rows and 442 columns
+Rows represent the targets (kinase) and columns represent the same targets (kinase)
+The first row and first column correspond to the same target and so on
+Cell represents the similarity between the two targets
+The values ​​have been already normalized using the WS method
+The values ​​range from 0 to 100, where 100 represents perfect similarity and 0 represents no similarity at all
+
+Y is the interaction matrix representing drug-target interactions (labels)
+It is a feature matrix of 68 rows and 442 columns (no missing values because np.isnan(Y)==False removes them)
+Rows represent the drugs (inhibitor) and columns represent the targets (kinase)
+Cell represents dissociation constant (Kd) in nanomoles (nM) between a drug and a target
+Lower Kd means stronger binding between drug and target, value of 10000 means no interaction
+Values in Y are scaled with -log10(Kd/1e9)
+
+2. Do train-test split for Y
+
+Y from the loaded dataset is splitted into training set and test set
+Split percentage is 0.2 meaning 20 % is used as training data
+
+Split ensures all drugs and targets in the test set exist in the training set
+This ensures generalizability while preventing model failures due to unseen drugs/targets
+
+3. Concatenate XD and XT to form X and do train-test split for X
+
+X = (XD, XT) is formed and splitted into training set and test set
+
+One concatenation is done to produce training set
+Other concatenation is done to produce test set
+
+In X, a row contains features related to a drug-target pair
+First the features related to the drug and then the features related to the target
+
+4. kNN for training
+
+Drug–target interaction prediction training is made with kNN algorithm using X and Y training sets
+
+During training, the model learns how feature patterns in X relate to interaction values in Y
+More precisely, X_train is used as input to predict Y_train using kNN.
+
+5. C index for evaluation
+
+Evaluation is made with C-index using X and Y test sets, and also P test set that includes predicted interaction values from trained kNN model
+C-index measures how well the predicted interaction values match the true rankings of drug–target interactions
+More precisely, model predicts interaction values from X_test, and these predictions are compared to Y_test using the C-index
+
+When C-index = 0.7548, it means that the kNN model correctly ranks drug-target interaction pairs ~75.48% of the time compared to random chance
+
+––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————–––
+
+* Description for FM based DTI prediction model in fm.py with data from Davis et al. *
+
+1. Load data from Davis et al.
+
+XD represents drug-drug similarities
+It is a feature matrix of 68 rows and 68 columns
+Rows represent the drugs (inhibitors) and columns represent the same drugs (inhibitors)
+The first row and first column correspond to the same drug and so on
+Cell represents the similarity between the two drugs
+The values ​​range from 0 to 1, where 1 represents perfect similarity and 0 represents no similarity t all
+The dataset is scaled by multiplying by 100
+
+XT represents target-target similarities
+It is a feature matrix of 442 rows and 442 columns
+Rows represent the targets (kinase) and columns represent the same targets (kinase)
+The first row and first column correspond to the same target and so on
+Cell represents the similarity between the two targets
+The values ​​have been already normalized using the WS method
+The values ​​range from 0 to 100, where 100 represents perfect similarity and 0 represents no similarity at all
+
+Y is the interaction matrix representing drug-target interactions (labels)
+It is a feature matrix of 68 rows and 442 columns (no missing values because np.isnan(Y)==False removes them)
+Rows represent the drugs (inhibitor) and columns represent the targets (kinase)
+Cell represents dissociation constant (Kd) in nanomoles (nM) between a drug and a target
+Lower Kd means stronger binding between drug and target, value of 10000 means no interaction
+Values in Y are scaled with -log10(Kd/1e9)
+
+Feature scaling is used to normalize XD and XT, ensuring better optimization for factorization machine
+
+2. Do CV to replace train-test split for Y
+
+Y from the loaded dataset is splitted into training set and test set
+Split percentage is 0.8 meaning 80 % is used as training data
+
+The Split ensures all drugs and targets in the test set exist in the training set
+This ensures generalizability while preventing model failures due to unseen drugs/targets
+
+3. Concatenate XD and XT, including side information, to form X and do CV instead of train-test split for X
+
+X = (XD, XT) is formed and splitted into training set and test set
+
+One concatenation is done to produce training set
+Other concatenation is done to produce test set
+
+In X, a row contains features related to a drug-target pair
+First the features related to the drug and then the features related to the target
+
+Optional incorporation of side information via one-hot encoding
+If enabled, a one-hot encoding representation of drugs and targets is appended to the feature matrix.
+
+4. CV for validation
+
+Cross-validation is performed using KFold with 10 folds.
+The hyperparameter k, latent factors in factorization machine, is chosen from a candidate set
+For each candidate, the model is trained and evaluated on different folds
+The k value with the best C-index performance is selected
+
+5. FM for training
+
+Drug–target interaction prediction training is made with FM with chosen hyperparameter k and using X and Y training sets
+Training is performed with 10 iterations using alternating least squares as the learning method.
+
+During training, the model learns how feature patterns in X relate to interaction values in Y
+More precisely, X_train is used as input to predict Y_train using kNN.
+
+6. C-index for evaluation
+
+Evaluation is made with C-index using X and Y test sets, and also P test set that includes predicted interaction values from trained FM model
+C-index measures how well the predicted interaction values match the true rankings of drug–target interactions
+More precisely, model predicts interaction values from X_test, and these predictions are compared to Y_test using the C-index
+
+When C-index = 0.75, it means that the kNN model correctly ranks drug-target interaction pairs ~ 75 % of the time compared to random chance
+
+––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————––––––––————–––
