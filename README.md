@@ -12,14 +12,6 @@ Combined features (both binary identifiers and side-information)
 Cross-validation for hyperparameter tuning and model evaluation
 C-index evaluation metric for ranking performance
 
-## Repository Structure
-├── Datasets/                 # Place all required datasets here
-├── src/
-│   └── main.py               # Main script to run the pipeline
-├── settings.py               # Configuration file for hyperparameters and dataset options
-├── README.md                 # This file
-└── requirements.txt          # Required Python packages
-
 ## Dependencies
 The pipeline requires:
 Python ≥ 3.9
