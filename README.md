@@ -12,12 +12,17 @@ Combined features (both binary identifiers and side-information)
 Cross-validation for hyperparameter tuning and model evaluation
 C-index evaluation metric for ranking performance
 
-project-root/
+
 | Datasets
+
 | LibFM
+
 | Models
-|—– fm.py
-|—– fmloop.py
+
+|— fm.py
+
+|— fmloop.py
+
 | RLScore
 
 
