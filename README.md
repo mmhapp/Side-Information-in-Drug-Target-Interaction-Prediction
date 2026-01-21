@@ -12,6 +12,18 @@ Combined features (both binary identifiers and side-information)
 Cross-validation for hyperparameter tuning and model evaluation
 C-index evaluation metric for ranking performance
 
+project-root/
+│
+├── data/ # Datasetit ja muut raakatiedostot
+│ ├── raw/ # Raakadatatiedostot
+│ └── processed/ # Esikäsitellyt datatiedostot
+│
+├── src/ # Lähdekoodit
+│ ├── preprocessing/ # Datan esikäsittelyyn liittyvät skriptit
+│ ├── analysis/ # Analyysit ja laskelmat
+│ └── models/ # Mallien koulutus ja tallennus
+│
+
 ## Dependencies
 The pipeline requires:
 Python ≥ 3.9
