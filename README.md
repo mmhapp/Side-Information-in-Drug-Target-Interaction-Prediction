@@ -1,6 +1,6 @@
 # Side Information in Drug–Target Interaction Prediction
 
-This repository contains the implementation for my Master of Science (Technology) Thesis in Biomedical Engineering and Health Technology at the University of Turku. The project focuses on developing a machine learning pipeline for predicting drug–target interactions (DTI) using factorization machines (FM). Whole thesis is available in [UTUPub](https://www.utupub.fi/handle/10024/181501).
+This repository contains the implementation for my Master of Science (Technology) Thesis in Biomedical Engineering and Health Technology at the University of Turku. The project focuses on developing a machine learning pipeline for predicting drug–target interactions (DTI) using factorization machine (FM). Whole thesis is available in [UTUPub](https://www.utupub.fi/handle/10024/181501). The fundamental idea behind factorisation machines is to model interactions between variables using latent factors, which is highly effective for processing sparse data, such as the drug–target pairs in this thesis. In drug discovery, the C-index is preferred for model evaluation because ranking candidates—identifying which one is superior to another—is more critical than determining absolute values.
 
 ## Project Background
 
@@ -16,14 +16,11 @@ In drug discovery, identifying new interactions experimentally is both costly an
 - **Extensive Dataset Support:** Built-in loading functions for seven standardized benchmark datasets (Davis, Metz, Merget, KIBA, GPCR, IC, and E)
 - **Flexible Feature Engineering:** Options to use binary identifiers only, side information only, or a concatenated combination of both
 - **Robust Validation:** Implements two-tier Nested Cross-Validation (NCV) to ensure reliable hyperparameter tuning and performance estimation
-- **Strict Data Integrity:** Ensures all drugs and targets in the test set are present in the training set, preventing unintended "cold-start" scenarios
+- **Strict Data Integrity:** Ensures all drugs and targets in the test set are present in the training set, preventing unintended cold-start scenarios
 - **Performance Metrics:** Evaluation based on C-index (Concordance Index), measuring the model's ability to correctly rank interaction strengths
 
-## Technical Implementation
+## Dependencies
 
-Main code is in `fm.py`, and the instructions in `descriptions.txt`. The model is implemented in Python, utilizing the `libFM` library, which is highly efficient for modeling interactions in sparse datasets.
-
-**Dependencies:**
 * `Python ≥ 3.9`
 * `pywFM` (Python wrapper for libFM)
 * `rlscore` (For C-index calculation)
@@ -32,7 +29,7 @@ Main code is in `fm.py`, and the instructions in `descriptions.txt`. The model i
 
 ## Key Findings
 
-The study revealed that **side information does not systematically improve predictions** across all datasets. Key results:
+The study revealed that **side information does not systematically improve predictions** across all datasets.
 
 | Dataset | C-index (Binary Only) | C-index (Both) | Improvement |
 |---------|----------------------|----------------|-------------|
@@ -44,7 +41,7 @@ The study revealed that **side information does not systematically improve predi
 | **Ion Channels** | 0.959 | **0.967** | **+0.76%** ✓ |
 | Enzymes | 0.955 | 0.947 | -0.87% |
 
-**Conclusion:** Binary identifiers alone achieve strong performance (C-index ≥ 0.83). Side information provides significant gains only for binary interaction datasets (GPCR, Ion Channels), while real-valued datasets show no systematic benefit.
+**Conclusion:** Binary identifiers alone achieve strong performance (C-index ≥ 0.83). Side information provides significant gains only for binary interaction datasets (GPCR, Ion Channels), while real-valued datasets show no systematic benefit. For bigger improvement, one needs to have more powerful model (graph or network based).
 
 ## Configuration
 
@@ -62,9 +59,7 @@ num_cv_folds_split = 3
 
 ## Methodology
 
-The core of this project is based on **Factorization Machines (FM)**, which are particularly effective for modeling interactions in sparse drug-target datasets. Unlike standard linear models, FMs capture second-order interactions between features using latent factors.
-
-The model equation is defined as:
+The core of this project is based on **Factorization Machines (FM)** that capture second-order interactions between features using latent factors. The model equation is defined as:
 
 $$\hat{y}(\mathbf{x}) = w_0 + \sum_{i=1}^n w_i x_i + \sum_{i=1}^n \sum_{j=i+1}^n \langle \mathbf{v}_i, \mathbf{v}_j \rangle x_i x_j$$
 
@@ -73,51 +68,17 @@ Where:
 - $w_i$ represents the strength of the $i$-th variable.
 - $\langle \mathbf{v}_i, \mathbf{v}_j \rangle$ models the interaction between the $i$-th and $j$-th variable by calculating the dot product of their latent vectors of size $k$.
 
-By factorizing the interaction parameters, the model can estimate interactions even in cases with high sparsity, which is a common challenge in drug discovery datasets.
-
-Tässä on täydennys README-tiedoston Methodology-osioon, joka käsittelee **C-indeksiä (Concordance Index)**. Teksti on johdettu diplomityösi luvusta 3.5 (s. 24) ja se noudattaa samaa teknistä ja akateemista tyyliä kuin aiemmat osiot.
-
-## Evaluation Metric: Concordance Index (C-index)
-
-The performance of the model is evaluated using the **Concordance Index (C-index)**, which is a standard metric in drug-target interaction prediction. Unlike point-wise metrics such as Mean Squared Error (MSE), the C-index focuses on the **rank correlation** between predicted and observed affinities.
-
-In the context of drug discovery, it is often more critical to correctly identify which drug-target pairs have higher binding affinities relative to others, rather than predicting exact numerical values.
-
-The Concordance Index is calculated using the following formula:
-
-$$C = \frac{1}{|\mathcal{P}|} \sum_{(i,j) \in \mathcal{P}} h(\hat{y}_i, \hat{y}_j)$$
-
-where the step function $h(u, v)$ is defined as:
-
-$$h(u, v) = 
-\begin{cases} 
-1.0 & \text{if } u > v \\ 
-0.5 & \text{if } u = v \\ 
-0.0 & \text{if } u < v 
-\end{cases}$$
-
-And:
-- $\mathcal{P}$ is the set of all pairs $(i, j)$ of samples such that their true labels satisfy $y_i > y_j$.
-- $|\mathcal{P}|$ is the number of such concordant-eligible pairs.
-- $\hat{y}_i$ and $\hat{y}_j$ are the predicted values for the samples.
-
-Why C-index?
-
-* **Robustness to Scaling:** Since it is rank-based, it is invariant to monotonic transformations of the output.
-* **Biological Relevance:** It directly measures the model's ability to prioritize drug candidates for experimental validation.
-* **Interpretation:** A C-index of **1.0** indicates perfect rank prediction, while **0.5** corresponds to random guessing. In this project, the baseline binary models achieved high performance (up to **0.96** on specific datasets), demonstrating strong discriminative power.
-
 ---
 
 **Note:** This implementation demonstrates that simpler models with binary identifiers often suffice for DTI prediction. The thesis explores why more complex side information doesn't consistently improve performance and discusses future directions for more sophisticated approaches.
 
-Tässä on täydennetty ja selkeäksi tekniseksi dokumentaatioksi muotoiltu "Usage"-osio README-tiedostoosi. Olen yhdistänyt antamasi tekniset yksityiskohdat ja komentoriviohjeet ammattimaiseen muotoon.
-
 ---
 
-## How to Run the Model
+# Technical Implementation
 
-### 1. Running the Factorisation Machine Model (`fm.py`)
+Main code is in `fm.py`, and the instructions in `descriptions.txt`. The model is implemented in Python, utilising the `libFM` library.
+
+## Running the Model (`fm.py`)
 
 The main script `fm.py` executes the DTI prediction pipeline with Nested Cross-Validation.
 
@@ -134,7 +95,7 @@ python fm.py [dataset] [feature_option]
 * `si`: Only side information (chemical/genomic similarities) is used.
 * `both`: Both binary identifiers and side information are concatenated.
 
-### 2. Batch Execution and Specialized Scripts
+## Batch Execution and Specialized Scripts
 
 * **Run all experiments:** To run the model across all seven datasets and all three feature options automatically:
 ```bash
@@ -154,7 +115,7 @@ python fmweights.py [dataset] [feature_option] [file_name]
 
 ```
 
-### Complete Pipeline
+## Complete Pipeline
 
 1. **Data Loading:** Loads drug-drug similarities (), target-target similarities (), and the interaction matrix ().
 2. **Scaling:** Features are normalized (e.g.,  scaled by 100,  converted to  values) to ensure optimal gradient descent/ALS performance.
@@ -163,7 +124,7 @@ python fmweights.py [dataset] [feature_option] [file_name]
 5. **Validation & Training:** Performs hyperparameter tuning for  and trains the final FM model using Alternating Least Squares (ALS).
 6. **Evaluation:** Calculates the **C-index** to measure the model's ability to rank interaction strengths correctly.
 
-### Results
+## Results
 
 * **`Results/results.txt`**: Raw output of the model runs.
 * **`Results/statistics.ipynb`**: Jupyter Notebook for visualizing and analyzing the performance metrics.
