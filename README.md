@@ -1,6 +1,6 @@
 # Side Information in Drug–Target Interaction Prediction
 
-This repository contains the implementation for my Master of Science (Technology) Thesis in Biomedical Engineering and Health Technology at the University of Turku. The project focuses on developing a machine learning pipeline for predicting drug–target interactions (DTI) using factorization machines (FM).
+This repository contains the implementation for my Master of Science (Technology) Thesis in Biomedical Engineering and Health Technology at the University of Turku. The project focuses on developing a machine learning pipeline for predicting drug–target interactions (DTI) using factorization machines (FM). Whole thesis is available in [UTUPub](https://www.utupub.fi/handle/10024/181501).
 
 ## Project Background
 
