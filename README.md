@@ -60,7 +60,6 @@ num_cv_folds_k = 3
 num_cv_folds_split = 3
 ```
 
-
 ## Methodology
 
 The core of this project is based on **Factorization Machines (FM)**, which are particularly effective for modeling interactions in sparse drug-target datasets. Unlike standard linear models, FMs capture second-order interactions between features using latent factors.
@@ -78,9 +77,7 @@ By factorizing the interaction parameters, the model can estimate interactions e
 
 Tässä on täydennys README-tiedoston Methodology-osioon, joka käsittelee **C-indeksiä (Concordance Index)**. Teksti on johdettu diplomityösi luvusta 3.5 (s. 24) ja se noudattaa samaa teknistä ja akateemista tyyliä kuin aiemmat osiot.
 
----
-
-### Evaluation Metric: Concordance Index (C-index)
+## Evaluation Metric: Concordance Index (C-index)
 
 The performance of the model is evaluated using the **Concordance Index (C-index)**, which is a standard metric in drug-target interaction prediction. Unlike point-wise metrics such as Mean Squared Error (MSE), the C-index focuses on the **rank correlation** between predicted and observed affinities.
 
@@ -109,11 +106,6 @@ Why C-index?
 * **Robustness to Scaling:** Since it is rank-based, it is invariant to monotonic transformations of the output.
 * **Biological Relevance:** It directly measures the model's ability to prioritize drug candidates for experimental validation.
 * **Interpretation:** A C-index of **1.0** indicates perfect rank prediction, while **0.5** corresponds to random guessing. In this project, the baseline binary models achieved high performance (up to **0.96** on specific datasets), demonstrating strong discriminative power.
-
-## Contact
-
-**MSc (Tech) Mikko Happonen**  
-Supervisors: Assoc. Prof. Antti Airola, MSc Riikka Numminen
 
 ---
 
@@ -176,5 +168,3 @@ python fmweights.py [dataset] [feature_option] [file_name]
 * **`Results/results.txt`**: Raw output of the model runs.
 * **`Results/statistics.ipynb`**: Jupyter Notebook for visualizing and analyzing the performance metrics.
 * **`Results/results.py`**: A utility script that parses `results.csv` and generates formatted LaTeX tables for thesis reporting.
-
----
