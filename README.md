@@ -1,6 +1,6 @@
 # Side Information in Drug–Target Interaction Prediction
 
-This repository contains the implementation for my Master of Science (Technology) Thesis in Biomedical Engineering and Health Technology at the University of Turku. The project focuses on developing a machine learning pipeline for predicting drug–target interactions (DTI) using factorization machine (FM). Whole thesis is available in [UTUPub](https://www.utupub.fi/handle/10024/181501). The fundamental idea behind factorisation machines is to model interactions between variables using latent factors, which is highly effective for processing sparse data, such as the drug–target pairs in this thesis. In drug discovery, the C-index is preferred for model evaluation because ranking candidates—identifying which one is superior to another—is more critical than determining absolute values.
+This repository contains the implementation for my Master of Science (Technology) Thesis in Biomedical Engineering and Health Technology at the University of Turku. The project focuses on developing a machine learning pipeline for predicting drug–target interactions (DTI) using factorisation machine (FM). Whole thesis is available to read in [UTUPub](https://www.utupub.fi/handle/10024/181501). The fundamental idea behind factorisation machines is to model interactions between variables using latent factors, which is highly effective for processing sparse data, such as the drug–target pairs in this thesis. In drug discovery, the C-index is preferred for model evaluation because ranking candidates—identifying which one is superior to another—is more critical than determining absolute values.
 
 ## Project Background
 
@@ -9,11 +9,11 @@ In drug discovery, identifying new interactions experimentally is both costly an
 1. **Binary Identifiers** (One-Hot Encoding for drugs and targets)
 2. **Side Information** (Chemical similarity matrices and genomic descriptors)
 
-**Research Question:** Does incorporating side information improve drug–target interaction prediction compared to using only factorization of an interaction matrix?
+**Research Question:** Does incorporating side information improve drug–target interaction prediction compared to using only factorisation of an interaction matrix?
 
 ## Key Features
 
-- **Extensive Dataset Support:** Built-in loading functions for seven standardized benchmark datasets (Davis, Metz, Merget, KIBA, GPCR, IC, and E)
+- **Extensive Dataset Support:** Built-in loading functions for seven standardised benchmark datasets (Davis, Metz, Merget, KIBA, GPCR, IC, and E)
 - **Flexible Feature Engineering:** Options to use binary identifiers only, side information only, or a concatenated combination of both
 - **Robust Validation:** Implements two-tier Nested Cross-Validation (NCV) to ensure reliable hyperparameter tuning and performance estimation
 - **Strict Data Integrity:** Ensures all drugs and targets in the test set are present in the training set, preventing unintended cold-start scenarios
@@ -51,7 +51,7 @@ Model hyperparameters in `settings.py`:
 task = 'regression'
 num_iter = 100
 learning_method = 'als'
-r2_regularization = 1.0
+r2_regularisation = 1.0
 candidate_k2_values = [4, 8, 16]
 num_cv_folds_k = 3
 num_cv_folds_split = 3
@@ -59,7 +59,7 @@ num_cv_folds_split = 3
 
 ## Methodology
 
-The core of this project is based on **Factorization Machines (FM)** that capture second-order interactions between features using latent factors. The model equation is defined as:
+The core of this project is based on **factorisation machine (FM)** that capture second-order interactions between features using latent factors. The model equation is defined as:
 
 $$\hat{y}(\mathbf{x}) = w_0 + \sum_{i=1}^d w_i x_i + \sum_{i=1}^d \sum_{j=i+1}^d \langle \mathbf{v}_i, \mathbf{v}_j \rangle x_i x_j$$
 
@@ -115,7 +115,7 @@ python fmweights.py [dataset] [feature_option] [file_name]
 ## Complete Pipeline
 
 1. **Data Loading:** Loads drug-drug similarities (), target-target similarities (), and the interaction matrix ().
-2. **Scaling:** Features are normalized (e.g.,  scaled by 100,  converted to  values) to ensure optimal gradient descent/ALS performance.
+2. **Scaling:** Features are normalised (e.g.,  scaled by 100,  converted to  values) to ensure optimal gradient descent/ALS performance.
 3. **Cross-Validation:** Uses `KFold` (typically 10 folds) to ensure every drug-target pair is used for both training and testing.
 4. **Feature Concatenation:** Merges drug and target features into a single sparse matrix , with optional one-hot encoding for biological entities.
 5. **Validation & Training:** Performs hyperparameter tuning for  and trains the final FM model using Alternating Least Squares (ALS).
@@ -124,5 +124,5 @@ python fmweights.py [dataset] [feature_option] [file_name]
 ## Results
 
 * **`Results/results.txt`**: Raw output of the model runs.
-* **`Results/statistics.ipynb`**: Jupyter Notebook for visualizing and analyzing the performance metrics.
+* **`Results/statistics.ipynb`**: Jupyter Notebook for visualising and analysing the performance metrics.
 * **`Results/results.py`**: A utility script that parses `results.csv` and generates formatted LaTeX tables for thesis reporting.
