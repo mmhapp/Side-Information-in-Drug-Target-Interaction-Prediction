@@ -121,8 +121,6 @@ python fmweights.py [dataset] [feature_option] [file_name]
 5. **Validation & Training:** Performs hyperparameter tuning for  and trains the final FM model using Alternating Least Squares (ALS).
 6. **Evaluation:** Calculates the **C-index** to measure the model's ability to rank interaction strengths correctly.
 
-## Results
+## Outputs
 
-* **`Results/results.txt`**: Raw output of the model runs.
-* **`Results/statistics.ipynb`**: Jupyter Notebook for visualising and analysing the performance metrics.
-* **`Results/results.py`**: A utility script that parses `results.csv` and generates formatted LaTeX tables for thesis reporting.
+* **`statistics.ipynb`**: Jupyter Notebook for visualising and analysing the performance metrics.
