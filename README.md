@@ -22,8 +22,9 @@ In drug discovery, identifying new interactions experimentally is both costly an
 ## Dependencies
 
 * `Python ≥ 3.9`
-* `pywFM` (Python wrapper for libFM)
-* `rlscore` (For C-index calculation)
+* `LibFM` (This contains the core factorisation machine code from https://github.com/srendle/libfm?)
+* `pywFM` (Python wrapper for libFM from https://github.com/jfloff/pywFM?tab=readme-ov-file)
+* `rlscore` (For C-index calculation from https://github.com/aatapa/RLScore)
 * `scikit-learn` (For preprocessing and K-Fold splitting)
 * `NumPy`
 
