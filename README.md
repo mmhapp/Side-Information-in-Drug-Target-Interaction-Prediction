@@ -21,34 +21,21 @@ In drug discovery, identifying new interactions experimentally is both costly an
 
 ## Dependencies
 
-* `Python ≥ 3.9`
-* `LibFM` (Contains the core factorisation machine code from https://github.com/srendle/libfm)
-* `pywFM` (Python wrapper for libFM from https://github.com/jfloff/pywFM?tab=readme-ov-file)
-* `rlscore` (For C-index calculation from https://github.com/aatapa/RLScore)
-* `scikit-learn` (For preprocessing and K-Fold splitting)
-* `NumPy`
-
 The project is developed with Python ≥ 3.9. The following libraries and tools are required to run the pipeline:
 
-Core Machine Learning & Data Processing
+Core Machine Learning & Data Processing:
+* `NumPy & Pandas` for matrix operations and structured data handling.
+* `Scikit-learn` utilised for KFold cross-validation, MinMaxScaler preprocessing, and evaluation metrics (MAE, MSE, R2).
+* `h5py` for loading and managing large-scale biological datasets stored in HDF5 format.
+* `tqdm` provides progress bars for long-running Nested Cross-Validation loops.
+* `Matplotlib & Seaborn` for generating performance visualizations and statistical analysis within statistics.ipynb.
 
-* `NumPy & Pandas` For matrix operations and structured data handling.
-* `Scikit-learn` Utilized for KFold cross-validation, MinMaxScaler preprocessing, and evaluation metrics (MAE, MSE, R2).
-* `h5py` For loading and managing large-scale biological datasets stored in HDF5 format.
-* `tqdm` Provides progress bars for long-running Nested Cross-Validation loops.
-* `Matplotlib & Seaborn` For generating performance visualizations and statistical analysis within statistics.ipynb.
-
-To install these, you can use the provided requirements.txt:
-
-Bash
-pip install -r requirements.txt
+To install these, one can use the provided requirements.txt: `pip install -r requirements.txt`
 
 Factorization Machine Implementation:
-
-* `LibFM` The core C++ engine for factorization machines. It must be compiled and available in your system's PATH. (Source)
-* `pywFM` A Python wrapper used to interface with the LibFM executable. (Source)
-* `RLScore` Used specifically for the cindex (Concordance Index) calculation, which is the primary metric for ranking-based DTI prediction. (Source)
-
+* `LibFM` The core C++ engine for factorization machines, must be compiled and available in your system's PATH ([Source](https://github.com/srendle/libfm)).
+* `pywFM` A Python wrapper used to interface with the LibFM executable ([Source](https://github.com/jfloff/pywFM?tab=readme-ov-file)).
+* `RLScore` Used for the C-index calculation, which is the primary metric for ranking-based DTI prediction ([Source](https://github.com/aatapa/RLScore)).
 
 ## Key Findings
 
