@@ -1,0 +1,12 @@
+# Core Data Processing
+numpy
+pandas
+h5py
+
+# Machine Learning & Preprocessing
+scikit-learn
+tqdm
+
+# Visualization & Analysis
+matplotlib
+seaborn
