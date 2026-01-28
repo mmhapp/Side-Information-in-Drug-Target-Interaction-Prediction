@@ -28,6 +28,28 @@ In drug discovery, identifying new interactions experimentally is both costly an
 * `scikit-learn` (For preprocessing and K-Fold splitting)
 * `NumPy`
 
+The project is developed with Python ≥ 3.9. The following libraries and tools are required to run the pipeline:
+
+Core Machine Learning & Data Processing
+
+* `NumPy & Pandas` For matrix operations and structured data handling.
+* `Scikit-learn` Utilized for KFold cross-validation, MinMaxScaler preprocessing, and evaluation metrics (MAE, MSE, R2).
+* `h5py` For loading and managing large-scale biological datasets stored in HDF5 format.
+* `tqdm` Provides progress bars for long-running Nested Cross-Validation loops.
+* `Matplotlib & Seaborn` For generating performance visualizations and statistical analysis within statistics.ipynb.
+
+To install these, you can use the provided requirements.txt:
+
+Bash
+pip install -r requirements.txt
+
+Factorization Machine Implementation:
+
+* `LibFM` The core C++ engine for factorization machines. It must be compiled and available in your system's PATH. (Source)
+* `pywFM` A Python wrapper used to interface with the LibFM executable. (Source)
+* `RLScore` Used specifically for the cindex (Concordance Index) calculation, which is the primary metric for ranking-based DTI prediction. (Source)
+
+
 ## Key Findings
 
 The study revealed that **side information does not systematically improve predictions** across all datasets.
