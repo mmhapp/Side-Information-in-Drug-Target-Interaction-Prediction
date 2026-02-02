@@ -83,7 +83,7 @@ where $w_0$ is the global bias, $w_i$ represents the strength of the $i$-th vari
 
 # Technical Implementation
 
-Main code is in `fm.py`, and the instructions in `descriptions.txt`. The model is implemented in Python, utilising the `libFM` library.
+Main code is in `fm.py`, and the instructions in `descriptions.txt` (knn.py is a basic version of model workflow but whit KNN instead of FM). The model is implemented in Python, utilising the `libFM` library.
 
 ## Running the Model (`fm.py`)
 
