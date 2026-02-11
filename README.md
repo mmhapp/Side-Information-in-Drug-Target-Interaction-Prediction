@@ -36,7 +36,7 @@ where $w_0$ is the global bias, $w_i$ represents the strength of the $i$-th vari
 The study revealed that side information does not systematically improve predictions across all datasets.
 
 | Dataset | Improvement on using SI | Improvement on using BI and SI |
-| --- | --- | --- |
+| :--- | :--- | :--- |
 | Davis et al. 2011 | -1.74 % | 0.05 % |
 | KI (Metz et al. 2011) | -9.28 % | -1.76 % |
 | KIBA (Tang et al. 2014) | -10.94 % | -1.08 % |
