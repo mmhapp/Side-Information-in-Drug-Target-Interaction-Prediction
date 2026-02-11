@@ -1,41 +1,31 @@
 # Side Information in Drug–Target Interaction Prediction
 
-This repository contains the implementation for my Master of Science (Technology) Thesis in Biomedical Engineering and Health Technology at the University of Turku. The project focuses on developing a machine learning pipeline for predicting drug–target interactions (DTI) using factorisation machine (FM). Whole thesis is available to read in [UTUPub](https://www.utupub.fi/handle/10024/181501). The fundamental idea behind factorisation machines is to model interactions between variables using latent factors, which is highly effective for processing sparse data, such as the drug–target pairs in this thesis. In drug discovery, the C-index is preferred for model evaluation because ranking candidates—identifying which one is superior to another—is more critical than determining absolute values.
+This repository contains the implementation for my Master of Science (Technology) Thesis in Biomedical Engineering and Health Technology at the University of Turku. The project focuses on developing a machine learning pipeline for predicting drug–target interactions (DTI) using factorisation machine (FM). Whole thesis is available to read in [UTUPub](https://www.utupub.fi/handle/10024/181501). The fundamental idea behind factorisation machines is to model interactions between variables using latent factors, which is highly effective for processing sparse data, such as the drug–target pairs in this thesis.
 
 ## Project Background
 
-In drug discovery, identifying new interactions experimentally is both costly and time-consuming. This model accelerates the process by predicting affinities (such as $K_d$ or $K_i$) non-experimentally by leveraging:
+In drug discovery, identifying new interactions experimentally is both costly and time-consuming. This model accelerates the process by predicting affinities $K_d$ non-experimentally by leveraging:
 
-1. **Binary Identifiers** (One-Hot Encoding for drugs and targets)
-2. **Side Information** (Chemical similarity matrices and genomic descriptors)
+1. **Binary Identifiers** (One-Hot Encodings of drugs and targets derived from drug–target interaction matrix)
+2. **Side Information** (Drug–drug similarity matrix or target–target similarity matrix representing chemical properties)
 
 **Research Question:** Does incorporating side information improve drug–target interaction prediction compared to using only factorisation of an interaction matrix?
 
+## Methodology
+
+The core of this project is based on **factorisation machine** that captures second-order interactions between features using latent factors. The model equation is defined as:
+
+$$\hat{y}(\mathbf{x}) = w_0 + \sum_{i=1}^d w_i x_i + \sum_{i=1}^d \sum_{j=i+1}^d \langle \mathbf{v}_i, \mathbf{v}_j \rangle x_i x_j$$
+
+where $w_0$ is the global bias, $w_i$ represents the strength of the $i$-th variable, and $\langle \mathbf{v}_i, \mathbf{v}_j \rangle$ models the interaction between the $i$-th and $j$-th variable by calculating the dot product of their latent vectors of size $k$.
+
 ## Key Features
 
+- **Data Integration:** Options to use binary identifiers only, side information only, or a concatenated combination of both
+- **Cross-Validation:** Implements two-tier Nested Cross-Validation (NCV) to ensure reliable hyperparameter tuning and performance estimation
+- **Cold-Start Problem Prevention:** Ensures all drugs and targets in the test set are present in the training set, preventing unintended cold-start scenarios
 - **Extensive Dataset Support:** Built-in loading functions for seven standardised benchmark datasets (Davis, Metz, Merget, KIBA, GPCR, IC, and E)
-- **Flexible Feature Engineering:** Options to use binary identifiers only, side information only, or a concatenated combination of both
-- **Robust Validation:** Implements two-tier Nested Cross-Validation (NCV) to ensure reliable hyperparameter tuning and performance estimation
-- **Strict Data Integrity:** Ensures all drugs and targets in the test set are present in the training set, preventing unintended cold-start scenarios
-- **Performance Metrics:** Evaluation based on C-index (Concordance Index), measuring the model's ability to correctly rank interaction strengths
-
-## Dependencies
-
-The project is developed with Python ≥ 3.9. The following libraries and tools are required to run the pipeline:
-
-Core Machine Learning & Data Processing:
-* `NumPy & Pandas` for matrix operations and structured data handling.
-* `Scikit-learn` utilised for KFold cross-validation, MinMaxScaler preprocessing, and evaluation metrics (MAE, MSE, R2).
-* `h5py` for loading and managing large-scale biological datasets stored in HDF5 format.
-* `tqdm` provides progress bars for long-running Nested Cross-Validation loops.
-* `Matplotlib & Seaborn` for generating performance visualizations and statistical analysis within statistics.ipynb.
-
-To install these, one can use the provided requirements.txt: `pip install -r requirements.txt`
-
-Factorization Machine Implementation:
-* `LibFM` The core C++ engine for factorization machines, must be compiled and available in your system's PATH ([Source](https://github.com/srendle/libfm)).
-* `pywFM` A Python wrapper used to interface with the LibFM executable ([Source](https://github.com/jfloff/pywFM?tab=readme-ov-file)).
-* `RLScore` Used for the C-index calculation, which is the primary metric for ranking-based DTI prediction ([Source](https://github.com/aatapa/RLScore)).
+- **Performance Metrics:** Evaluation based on C-index (Concordance Index), measuring the model's ability to correctly rank interaction strengths. In drug discovery, the C-index is preferred for model evaluation because ranking candidates—identifying which one is superior to another—is more critical than determining absolute values.
 
 ## Key Findings
 
@@ -51,7 +41,25 @@ The study revealed that **side information does not systematically improve predi
 | **Ion Channels** | 0.959 | **0.967** | **+0.76%** ✓ |
 | Enzymes | 0.955 | 0.947 | -0.87% |
 
-**Conclusion:** Binary identifiers alone achieve strong performance (C-index ≥ 0.83). Side information provides significant gains only for binary interaction datasets (GPCR, Ion Channels), while real-valued datasets show no systematic benefit. For bigger improvement, one needs to have more powerful model (graph or network based).
+**Conclusion:** Binary identifiers alone achieve strong performance (C-index ≥ 0.83). Side information provides significant gains only for binary interaction datasets (GPCR, Ion Channels), while real-valued datasets show no systematic benefit. For bigger improvement, one needs to have more powerful model (graph or network based) or more extensive data types (3D, 4D, physics, biology, chemistry)
+
+## Dependencies
+
+The project is developed with Python ≥ 3.9. The following libraries and tools are required to run the model:
+
+Core Machine Learning, Scientific Operations, and Data Processing:
+* `NumPy` `Pandas` for matrix operations and structured data handling.
+* `Scikit-learn` utilised for KFold cross-validation, MinMaxScaler preprocessing, and evaluation metrics (MAE, MSE, R2).
+* `h5py` for loading and managing large-scale biological datasets stored in HDF5 format.
+* `tqdm` provides progress bars for long-running Nested Cross-Validation loops.
+* `Matplotlib` `Seaborn` for generating performance visualizations and statistical analysis within statistics.ipynb.
+
+To install these, one can use the provided requirements.txt: `pip install -r requirements.txt`
+
+Factorization Machine Implementation:
+* `LibFM` The core C++ engine for factorization machines, must be compiled and available in system's PATH ([Source](https://github.com/srendle/libfm)).
+* `pywFM` A Python wrapper used to interface with the LibFM executable ([Source](https://github.com/jfloff/pywFM?tab=readme-ov-file)).
+* `RLScore` Used for the C-index calculation, which is the primary metric for ranking-based DTI prediction ([Source](https://github.com/aatapa/RLScore)).
 
 ## Configuration
 
@@ -67,27 +75,19 @@ num_cv_folds_k = 3
 num_cv_folds_split = 3
 ```
 
-## Methodology
-
-The core of this project is based on **factorisation machine (FM)** that capture second-order interactions between features using latent factors. The model equation is defined as:
-
-$$\hat{y}(\mathbf{x}) = w_0 + \sum_{i=1}^d w_i x_i + \sum_{i=1}^d \sum_{j=i+1}^d \langle \mathbf{v}_i, \mathbf{v}_j \rangle x_i x_j$$
-
-where $w_0$ is the global bias, $w_i$ represents the strength of the $i$-th variable, and $\langle \mathbf{v}_i, \mathbf{v}_j \rangle$ models the interaction between the $i$-th and $j$-th variable by calculating the dot product of their latent vectors of size $k$.
-
 ---
 
-**Note:** This implementation demonstrates that simpler models with binary identifiers often suffice for DTI prediction. The thesis explores why more complex side information doesn't consistently improve performance and discusses future directions for more sophisticated approaches.
+**Note:** This implementation demonstrates that simpler models with binary identifiers often suffice for this kind of DTI prediction. The thesis explores why more complex side information doesn't consistently improve performance and discusses future directions for more sophisticated approaches. In addition to improving this method by utilising different models or data types, it is also possible to move to Out-of-Distribution (OOD) scenarios to predict interactions for entirely novel chemical scaffolds.
 
 ---
 
 # Technical Implementation
 
-Main code is in `fm.py`, and the instructions in `descriptions.txt` (`knn.py` is a basic version of model workflow but with KNN instead of FM). The model is implemented in Python, utilising the `libFM` library.
+Main code is in `fm.py`, and the instructions in `descriptions.txt` (`knn.py` is a basic version of model workflow but with kNN instead of FM). The model is implemented in Python, utilising the `libFM` library.
 
 ## Running the Model (`fm.py`)
 
-The main script `fm.py` executes the DTI prediction pipeline with Nested Cross-Validation.
+The main script `fm.py` executes the DTI prediction pipeline.
 
 **Command format:**
 
