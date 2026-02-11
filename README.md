@@ -1,51 +1,76 @@
 # Side Information in Drug–Target Interaction Prediction
 
-This repository contains the implementation for my Master of Science (Technology) Thesis in Biomedical Engineering and Health Technology at the University of Turku. The project focuses on developing a machine learning pipeline for predicting drug–target interactions (DTI) using factorisation machine (FM). Whole thesis is available to read in [UTUPub](https://www.utupub.fi/handle/10024/181501). The fundamental idea behind factorisation machines is to model interactions between variables using latent factors, which is highly effective for processing sparse data, such as the drug–target pairs in this thesis.
+This repository contains the implementation for my Master of Science (Technology) Thesis in Biomedical Engineering and Health Technology at the University of Turku. The project focuses on developing a machine learning (ML) pipeline for predicting drug–target interactions (DTI) using factorisation machine (FM). The thesis is available to read in [UTUPub](https://www.utupub.fi/handle/10024/181501).
 
-## Project Background
+---
 
-In drug discovery, identifying new interactions experimentally is both costly and time-consuming. This model accelerates the process by predicting affinities $K_d$ non-experimentally by leveraging:
+## Background
 
-1. **Binary Identifiers** (One-Hot Encodings of drugs and targets derived from drug–target interaction matrix)
-2. **Side Information** (Drug–drug similarity matrix or target–target similarity matrix representing chemical properties)
+In drug discovery, identifying new interactions experimentally is both costly and time-consuming. This model accelerates the process by predicting affinities $K_d$ non-experimentally by leveraging binary identifiers and side information.
 
-**Research Question:** Does incorporating side information improve drug–target interaction prediction compared to using only factorisation of an interaction matrix?
+1. *Binary Identifiers* (One-Hot Encodings of drugs and targets derived from drug–target interaction matrix $\mathbf{Y}$)
+2. *Side Information* (Drug–drug similarity matrix $\mathbf{X}_D$ or target–target similarity matrix $\mathbf{X}_T$ representing chemical properties)
+
+Seven benchmark datasets are supported. The datasets have different amounts of drugs and targets, as well as different types of drugs and targets. However, each dataset includes an interaction matrix $\mathbf{Y}$ for labels and binary identifiers, as well as drug and target similarity matrices $\mathbf{X}_D$ and $\mathbf{X}_T$ for side information. 
+
+*Research Question:* Does the incorporation of side information improved drug–target interaction prediction compared to using only factorisation of an interaction matrix?
 
 ## Methodology
 
-The core of this project is based on **factorisation machine** that captures second-order interactions between features using latent factors. The model equation is defined as:
+The fundamental idea behind FMs is to model interactions between features using latent factors, which is highly effective for processing sparse data, such as the drug–target pairs. The model equation is defined as:
 
-$$\hat{y}(\mathbf{x}) = w_0 + \sum_{i=1}^d w_i x_i + \sum_{i=1}^d \sum_{j=i+1}^d \langle \mathbf{v}_i, \mathbf{v}_j \rangle x_i x_j$$
+$\hat{y}(\mathbf{x}) = w_0 + \sum_{i=1}^d w_i x_i + \sum_{i=1}^d \sum_{j=i+1}^d \langle \mathbf{v}_i, \mathbf{v}_j \rangle x_i x_j$
 
 where $w_0$ is the global bias, $w_i$ represents the strength of the $i$-th variable, and $\langle \mathbf{v}_i, \mathbf{v}_j \rangle$ models the interaction between the $i$-th and $j$-th variable by calculating the dot product of their latent vectors of size $k$.
 
-## Key Features
+## Features
 
-- **Data Integration:** Options to use binary identifiers only, side information only, or a concatenated combination of both
-- **Cross-Validation:** Implements two-tier Nested Cross-Validation (NCV) to ensure reliable hyperparameter tuning and performance estimation
-- **Cold-Start Problem Prevention:** Ensures all drugs and targets in the test set are present in the training set, preventing unintended cold-start scenarios
-- **Extensive Dataset Support:** Built-in loading functions for seven standardised benchmark datasets (Davis, Metz, Merget, KIBA, GPCR, IC, and E)
-- **Performance Metrics:** Evaluation based on C-index (Concordance Index), measuring the model's ability to correctly rank interaction strengths. In drug discovery, the C-index is preferred for model evaluation because ranking candidates—identifying which one is superior to another—is more critical than determining absolute values.
+- *Data Integration:* Feature options of using binary identifiers only, side information only, or a concatenated combination of both
+- *Cross-Validation:* Two-tier Nested Cross-Validation for hyperparameter tuning and train-test split and to avoid data leakage
+- *Cold-Start Prevention:* Ensures all drugs and targets in the test set are present in the training set to ensure robustness of this model
+- *Dataset Support:* Built-in loading functions for seven standardised benchmark datasets
+- *Performance Metric:* Evaluation based on C-index, measuring the model's ability to correctly rank interaction strengths.
 
-## Key Findings
+## Findings
 
-The study revealed that **side information does not systematically improve predictions** across all datasets.
+The study revealed that side information does not systematically improve predictions across all datasets.
 
-| Dataset | C-index (Binary Only) | C-index (Both) | Improvement |
-|---------|----------------------|----------------|-------------|
-| Davis KI | 0.855 | 0.856 | +0.05% |
-| Metz KI | 0.830 | 0.815 | -1.76% |
-| KIBA | 0.831 | 0.822 | -1.08% |
-| Merget KW | 0.851 | 0.847 | -0.43% |
-| **GPCR** | 0.894 | **0.921** | **+3.01%** ✓ |
-| **Ion Channels** | 0.959 | **0.967** | **+0.76%** ✓ |
-| Enzymes | 0.955 | 0.947 | -0.87% |
+| Dataset | Improvement on using SI | Improvement on using BI and SI |
+| --- | --- | --- |
+| Davis et al. 2011 | -1.74 % | 0.05 % |
+| KI (Metz et al. 2011) | -9.28 % | -1.76 % |
+| KIBA (Tang et al. 2014) | -10.94 % | -1.08 % |
+| KW (Merget et al. 2017) | -5.97 % | -0.43 % |
+| GPCR (Yamanishi et al. 2008) | 2.19 % | 3.01 % ✓ |
+| IC (Yamanishi et al. 2008) | 0.15 % | 0.76 % ✓ |
+| E (Yamanishi et al. 2008) | -2.93 % | -0.87 % |
 
-**Conclusion:** Binary identifiers alone achieve strong performance (C-index ≥ 0.83). Side information provides significant gains only for binary interaction datasets (GPCR, Ion Channels), while real-valued datasets show no systematic benefit. For bigger improvement, one needs to have more powerful model (graph or network based) or more extensive data types (3D, 4D, physics, biology, chemistry)
+---
+
+## Conclusions
+
+- Binary identifiers alone achieve strong performance (C-index ≥ 0.83)
+- Side information provides significant gains only for binary datasets (GPCR, Ion Channels)
+- FM lacks capacity for complex non-linear interactions
+
+## Directions
+
+- For greater improvements, more powerful models (graph, network, or deep learning) are needed
+- For greater improvements, more extensive data types (3D or 4D, SMILES, sequences, or physics-based features) are needed
+
+## Limitations
+
+- Predictions made inside the interaction matrix Y
+- Both drugs and targets present in training data
+- Focus on ranking performance with C-index metric
+
+*Note:* In addition to improving this method by utilising different models or data types, it is also possible to move to Cold-Start or even to Out-of-Distribution (OOD) scenarios to predict interactions for novel chemical scaffolds. Thus, it is a major challenge to maintain robustness and generalisability of the model.
+
+---
 
 ## Dependencies
 
-The project is developed with Python ≥ 3.9. The following libraries and tools are required to run the model:
+The project is developed with Python ≥ 3.9. The following libraries and tools are required to run the model.
 
 Core Machine Learning, Scientific Operations, and Data Processing:
 * `NumPy` `Pandas` for matrix operations and structured data handling.
@@ -56,7 +81,7 @@ Core Machine Learning, Scientific Operations, and Data Processing:
 
 To install these, one can use the provided requirements.txt: `pip install -r requirements.txt`
 
-Factorization Machine Implementation:
+Factorisation Machine Implementation:
 * `LibFM` The core C++ engine for factorization machines, must be compiled and available in system's PATH ([Source](https://github.com/srendle/libfm)).
 * `pywFM` A Python wrapper used to interface with the LibFM executable ([Source](https://github.com/jfloff/pywFM?tab=readme-ov-file)).
 * `RLScore` Used for the C-index calculation, which is the primary metric for ranking-based DTI prediction ([Source](https://github.com/aatapa/RLScore)).
@@ -75,62 +100,64 @@ num_cv_folds_k = 3
 num_cv_folds_split = 3
 ```
 
----
+## Usage
 
-**Note:** This implementation demonstrates that simpler models with binary identifiers often suffice for this kind of DTI prediction. The thesis explores why more complex side information doesn't consistently improve performance and discusses future directions for more sophisticated approaches. In addition to improving this method by utilising different models or data types, it is also possible to move to Out-of-Distribution (OOD) scenarios to predict interactions for entirely novel chemical scaffolds.
-
----
-
-# Technical Implementation
-
-Main code is in `fm.py`, and the instructions in `descriptions.txt` (`knn.py` is a basic version of model workflow but with kNN instead of FM). The model is implemented in Python, utilising the `libFM` library.
-
-## Running the Model (`fm.py`)
-
-The main script `fm.py` executes the DTI prediction pipeline.
-
-**Command format:**
+Main code is in `fm.py`, and the instructions in `descriptions.txt` (`knn.py` is a basic version of model workflow but with kNN instead of FM). The model is implemented in Python, utilising the `libFM` library. Execute DTI predictions with:
 
 ```bash
 python fm.py [dataset] [feature_option]
-
 ```
 
-* **`[dataset]`**: Choose from `davis`, `metz`, `tang`, `merget`, `gpcr`, `ic`, or `e`.
-* **`[feature_option]`**:
-* `bi`: Only binary identifiers (one-hot encoding) are used.
-* `si`: Only side information (chemical/genomic similarities) is used.
-* `both`: Both binary identifiers and side information are concatenated.
+- `[dataset]`: Choose from `davis`, `metz`, `tang`, `merget`, `gpcr`, `ic`, `e`
+- `[feature_option]`:
+  - `bi` - Binary identifiers only (one-hot encoding)
+  - `si` - Side information only (similarity matrices)
+  - `both` - Concatenated combination of both
 
-## Batch Execution and Specialized Scripts
+## Examples
 
-* **Run all experiments:** To run the model across all seven datasets and all three feature options automatically:
+```bash
+# Binary identifiers only on Davis dataset
+python fm.py davis bi
+
+# Both features on GPCR dataset
+python fm.py gpcr both
+
+# Side information only on Ion Channels dataset
+python fm.py ic si
+```
+
+Run all experiments automatically:
 ```bash
 python fmloop.py
-
 ```
 
-* **Export predictions:** To save predicted interaction values to a CSV file (`Results/predictions_[file_name].csv`):
+Save predicted interaction values (Output: `Results/predictions_[file_name].csv`):
 ```bash
 python fmpredictions.py [dataset] [feature_option] [file_name]
-
 ```
 
-* **Save model weights:** To export trained model weights to a JSON file (`Results/weights_[file_name].json`):
+Save trained model parameters (Output: `Results/weights_[file_name].json`):
 ```bash
 python fmweights.py [dataset] [feature_option] [file_name]
-
 ```
 
-## Complete Pipeline
+## Pipeline
 
-1. **Data Loading:** Loads drug-drug similarities (), target-target similarities (), and the interaction matrix ().
-2. **Scaling:** Features are normalised (e.g.,  scaled by 100,  converted to  values) to ensure optimal gradient descent/ALS performance.
-3. **Cross-Validation:** Uses `KFold` (typically 10 folds) to ensure every drug-target pair is used for both training and testing.
-4. **Feature Concatenation:** Merges drug and target features into a single sparse matrix , with optional one-hot encoding for biological entities.
-5. **Validation & Training:** Performs hyperparameter tuning for  and trains the final FM model using Alternating Least Squares (ALS).
-6. **Evaluation:** Calculates the **C-index** to measure the model's ability to rank interaction strengths correctly.
+1. *Dataset loading*: Import $\mathbf{Y}$ (drug–target interaction matrix), $\mathbf{X}_D$ (drug similarities), $\mathbf{X}_T$ (target similarities)
+2. *CV to replace train-test split of the dataset*: 3-fold CV to replace train-test split
+3. *Feature concatenation*: Merge drug and target features with only binary identifiers, side information, or both
+4. *CV for Model Validation*: Hyperparameter tuning $k∈{4,8,16}$
+5. *Model training*: ALS-based training of the FM model
+6. *Model evaluation*: Calculate C-index to measure ranking performance
 
-## Outputs
+## Analysis
 
-* **`statistics.ipynb`**: Jupyter Notebook for visualising and analysing the performance metrics.
+Use the Jupyter notebook for visualizations:
+```bash
+jupyter notebook statistics.ipynb
+```
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
