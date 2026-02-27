@@ -2,39 +2,56 @@
 
 This repository contains the implementation for my Master of Science (Technology) Thesis in Biomedical Engineering and Health Technology at the University of Turku. The project focuses on developing a machine learning (ML) pipeline for predicting drug–target interactions (DTI) using factorisation machine (FM). The thesis is available to read in [UTUPub](https://www.utupub.fi/handle/10024/181501).
 
+Thesis presents a structured and scientific pipeline and provides clear, data-driven answers to its core research question. It follows a scientific process, provides a transparent analysis of its findings, and correctly identifies the boundaries of its chosen model. A key takeaway is that more data doesn't always mean a better model—it is possible to model interactions between two entities without needing a massive neural network. Simple binary identifiers sometimes outperform complex chemical descriptors, teaching the importance of well-designed feature engineering. This thesis also highlights the handling of high-dimensional sparse data, a problem common in recommendation engines, ad-tech, and search.
+
+Unlike many deep learning 'black-box' models, this FM-based approach provides interpretability by explicitly modeling pairwise interactions through latent vectors, allowing for a clearer understanding of feature contributions in the DTI space.
+
 ---
 
 ## Background
 
-In drug discovery, identifying new interactions experimentally is both costly and time-consuming. This model accelerates the process by predicting affinities $K_d$ non-experimentally by leveraging binary identifiers and side information.
+In drug discovery, identifying new interactions experimentally is both costly and time-consuming. This AI model accelerates the process by predicting affinities $K_d$ non-experimentally with the help of binary identifiers and side information.
 
 1. *Binary Identifiers* (One-Hot Encodings of drugs and targets derived from drug–target interaction matrix $\mathbf{Y}$)
 2. *Side Information* (Drug–drug similarity matrix $\mathbf{X}_D$ or target–target similarity matrix $\mathbf{X}_T$ representing chemical properties)
 
 Seven benchmark datasets are supported. The datasets have different amounts of drugs and targets, as well as different types of drugs and targets. However, each dataset includes an interaction matrix $\mathbf{Y}$ for labels and binary identifiers, as well as drug and target similarity matrices $\mathbf{X}_D$ and $\mathbf{X}_T$ for side information. 
 
-*Research Question:* Does the incorporation of side information improved drug–target interaction prediction compared to using only factorisation of an interaction matrix?
+*Research Question:* Does the incorporation of side information improve drug–target interaction prediction compared to using only factorisation of an interaction matrix?
 
 ## Methodology
 
-The fundamental idea behind FMs is to model interactions between features using latent factors, which is highly effective for processing sparse data, such as the drug–target pairs. The model equation is defined as:
+The fundamental idea behind FMs is to model interactions between features using latent factors, which is highly effective for processing sparse data, such as the drug–target interactions:
 
-$\hat{y}(\mathbf{x}) = w_0 + \sum_{i=1}^d w_i x_i + \sum_{i=1}^d \sum_{j=i+1}^d \langle \mathbf{v}_i, \mathbf{v}_j \rangle x_i x_j$
+$$\hat{y}(\mathbf{x}) = w_0 + \sum_{i=1}^d w_i x_i + \sum_{i=1}^d \sum_{j=i+1}^d \langle \mathbf{v}_i, \mathbf{v}_j \rangle x_i x_j$$
 
-where $w_0$ is the global bias, $w_i$ represents the strength of the $i$-th variable, and $\langle \mathbf{v}_i, \mathbf{v}_j \rangle$ models the interaction between the $i$-th and $j$-th variable by calculating the dot product of their latent vectors of size $k$.
+where $w_0$ is the global bias, $w_i$ represents the strength of the $i$-th variable, and $\langle \mathbf{v}_i, \mathbf{v}_j \rangle$ models the interaction between the $i$-th and $j$-th variable by calculating the dot product of their latent vectors of size $k$. Alternative least squares (ALS) is used for optimisation and L2 is used for regularisation.
 
-## Features
+Also, following methodologies are present:
 
-- *Data Integration:* Feature options of using binary identifiers only, side information only, or a concatenated combination of both
-- *Cross-Validation:* Two-tier Nested Cross-Validation for hyperparameter tuning and train-test split and to avoid data leakage
-- *Cold-Start Prevention:* Ensures all drugs and targets in the test set are present in the training set to ensure robustness of this model
-- *Dataset Support:* Built-in loading functions for seven standardised benchmark datasets
-- *Performance Metric:* Evaluation based on C-index, measuring the model's ability to correctly rank interaction strengths.
+- *Feature engineering*: Options of using binary identifiers only, side information only, or a concatenated combination of both in the training data
+- *Two-tier Nested Cross-Validation*: Used for hyperparameter tuning and train-test split and to avoid data leakage
+- *Cold-Start Problem Prevention*: Ensures predictions are made only for known drugs and targets to ensure robustness of the model
+- *Dataset Support*: Built-in loading functions for seven standardised benchmark drug–target datasets
+- Evaluation*: Based on C-index metric, measuring the model's ability to correctly rank interaction strengths
+
+The complete representation of a drug–target pair is constructed by concatenating binary identifiers and side information into a single input vector:
+
+$$\mathbf{x}^{(i,j)} = \left( \mathbf{e}_{d}^{(i)}, \mathbf{e}_{t}^{(j)}, \mathbf{x}_{d}^{(i)}, \mathbf{x}_{t}^{(j)} \right)$$
+
+where:
+* $\mathbf{e}_{d}^{(i)}$ represents the binary identifiers (One-Hot Encoding) of drug $d_i$
+* $\mathbf{e}_{t}^{(j)}$ represents the binary identifiers (One-Hot Encoding) of target $t_j$
+* $\mathbf{x}_{d}^{(i)}$ represents the side information (similarity profile) of drug $d_i$
+* $\mathbf{x}_{t}^{(j)}$ represents the side information (similarity profile) of target $t_j$
+
+This modular structure allows the model to toggle between using only identifiers (**BI**), only side information (**SI**), or the full concatenated feature set (**BI** and **SI**).
 
 ## Findings
 
 The study revealed that side information does not systematically improve predictions across all datasets.
 
+Table 5.2: Improvements of C-index values when using the proposed DTI prediction models in the scenarios with using only SI, and with using both BI and SI, relative to the scenario with using only BI.
 | Dataset | Improvement on using SI | Improvement on using BI and SI |
 | :--- | :--- | :--- |
 | Davis et al. 2011 | -1.74 % | 0.05 % |
@@ -49,22 +66,21 @@ The study revealed that side information does not systematically improve predict
 
 ## Conclusions
 
-- Binary identifiers alone achieve strong performance (C-index ≥ 0.83)
-- Side information provides significant gains only for binary datasets (GPCR, Ion Channels)
-- FM lacks capacity for complex non-linear interactions
+- Binary identifiers alone achieve strong performance (C-index ≥ 0.83) and can be used as a fully-functioning predictive model
+- Side information provides significant improvements only for binary datasets (GPCR, Ion Channels) because these are less complex
+- FM lacks capacity for complex non-linear interactions which causes the low impact of side information
 
 ## Directions
 
-- For greater improvements, more powerful models (graph, network, or deep learning) are needed
-- For greater improvements, more extensive data types (3D or 4D, SMILES, sequences, or physics-based features) are needed
+- For greater improvements, more powerful AI models (graph, network, or DL) are needed
+- For greater improvements, more extensive data types (3D, 4D, SMILES, sequences, or physics-based features) are needed
 
 ## Limitations
 
-- Predictions made inside the interaction matrix Y
-- Both drugs and targets present in training data
-- Focus on ranking performance with C-index metric
+- Predictions made only inside the interaction matrix $\mathbf{Y}$ to prevent the cold-start problem
+- Focus in evaluating the performance of the model is solely in C-index metric since it evaluates ranking
 
-*Note:* In addition to improving this method by utilising different models or data types, it is also possible to move to Cold-Start or even to Out-of-Distribution (OOD) scenarios to predict interactions for novel chemical scaffolds. Thus, it is a major challenge to maintain robustness and generalisability of the model.
+*Note:* In addition to improving this method by utilising different models or data types, it is also possible to do predictions outside the $\mathbf{Y}$ and thus move to Cold-Start or even to Out-of-Distribution (OOD) scenarios to predict interactions for novel chemical scaffolds. In this scenario, it is a major challenge to maintain robustness and generalisability of the model. Current model supprots a transductive setting—predicting missing links between known entities—and not a inductive setting—predicting for entirely new molecules.
 
 ---
 
@@ -141,6 +157,16 @@ Save trained model parameters (Output: `Results/weights_[file_name].json`):
 ```bash
 python fmweights.py [dataset] [feature_option] [file_name]
 ```
+
+## Project
+
+```.
+├── data/               # HDF5 benchmark datasets
+├── Results/            # Output directory for weights and predictions
+├── fm.py               # Main execution script
+├── fmloop.py           # Automated experiment runner
+├── settings.py         # Hyperparameter configurations
+└── statistics.ipynb    # Visualization and analysis```
 
 ## Pipeline
 
