@@ -166,7 +166,8 @@ python fmweights.py [dataset] [feature_option] [file_name]
 ├── fm.py               # Main execution script
 ├── fmloop.py           # Automated experiment runner
 ├── settings.py         # Hyperparameter configurations
-└── statistics.ipynb    # Visualization and analysis```
+└── statistics.ipynb    # Visualization and analysis
+```
 
 ## Pipeline
 
