@@ -25,7 +25,7 @@ The fundamental idea behind FMs is to model interactions between features using 
 
 $$\hat{y}(\mathbf{x}) = w_0 + \sum_{i=1}^d w_i x_i + \sum_{i=1}^d \sum_{j=i+1}^d \langle \mathbf{v}_i, \mathbf{v}_j \rangle x_i x_j$$
 
-where $w_0$ is the global bias, $w_i$ represents the strength of the $i$-th variable, and $\langle \mathbf{v}_i, \mathbf{v}_j \rangle$ models the interaction between the $i$-th and $j$-th variable by calculating the dot product of their latent vectors of size $k$. Alternative least squares (ALS) is used for optimisation and L2 is used for regularisation.
+where $w_0$ is the global bias, $w_i$ represents the strength of the $i$-th variable, $x_i$, and $\langle \mathbf{v}_i, \mathbf{v}_j \rangle$ models the interaction between the $i$-th and $j$-th variable by calculating the dot product of their latent vectors of size $d$. Alternative least squares (ALS) is used for optimisation and L2 is used for regularisation.
 
 Also, following methodologies are present:
 
