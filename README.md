@@ -33,7 +33,7 @@ Also, following methodologies are present:
 - *Two-tier Nested Cross-Validation*: Used for hyperparameter tuning and train-test split and to avoid data leakage
 - *Cold-Start Problem Prevention*: Ensures predictions are made only for known drugs and targets to ensure robustness of the model
 - *Dataset Support*: Built-in loading functions for seven standardised benchmark drug–target datasets
-- Evaluation*: Based on C-index metric, measuring the model's ability to correctly rank interaction strengths
+- *Evaluation*: Based on C-index metric, measuring the model's ability to correctly rank interaction strengths
 
 The complete representation of a drug–target pair is constructed by concatenating binary identifiers and side information into a single input vector:
 
