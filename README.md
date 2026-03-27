@@ -154,12 +154,12 @@ python fmweights.py [dataset] [feature_option] [file_name]
 ## Project
 
 ```.
-├── data/               # HDF5 benchmark datasets
+├── data/               # Benchmark datasets
 ├── Results/            # Output directory for weights and predictions
 ├── fm.py               # Main execution script
 ├── fmloop.py           # Automated experiment runner
 ├── settings.py         # Hyperparameter configurations
-└── statistics.ipynb    # Visualization and analysis
+└── statistics.ipynb    # Visualisation and analysis
 ```
 
 ## Pipeline
