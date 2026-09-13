@@ -52,7 +52,7 @@ The study revealed that using SI or BI and SI does not systematically improve pr
 
 | Dataset | Improvement on using SI | Improvement on using BI and SI |
 | :--- | :--- | :--- |
-| Davis et al. 2011 | -1.74 % | 0.05 % |
+| KI (Davis et al. 2011) | -1.74 % | 0.05 % |
 | KI (Metz et al. 2011) | -9.28 % | -1.76 % |
 | KIBA (Tang et al. 2014) | -10.94 % | -1.08 % |
 | KW (Merget et al. 2017) | -5.97 % | -0.43 % |
