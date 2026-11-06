@@ -74,7 +74,7 @@ The study revealed that using SI or BI and SI does not systematically improve pr
 
 *Dataset loading*: Import $\mathbf{Y}$ (drug–target interaction matrix), $\mathbf{X}_D$ (drug similarities), $\mathbf{X}_T$ (target similarities).
 
-*CV to replace train-test split of the dataset*: 3-fold CV to replace train-test split.
+*CV to replace train-test split of the dataset*: 3-fold cross-validation to replace train-test split.
 
 *Feature concatenation*: Merge drug and target features with only binary identifiers, side information, or both.
 
@@ -89,18 +89,18 @@ The study revealed that using SI or BI and SI does not systematically improve pr
 The project is developed with Python ≥ 3.9. The following libraries and tools are required to run the model.
 
 Core libraries for machine learning, scientific operations, and data processing:
-* `NumPy` `Pandas` for matrix operations and structured data handling.
-* `Scikit-learn` utilised for KFold cross-validation, MinMaxScaler preprocessing, and evaluation metrics (MAE, MSE, R2).
-* `h5py` for loading and managing large-scale biological datasets stored in HDF5 format.
-* `tqdm` provides progress bars for long-running Nested Cross-Validation loops.
-* `Matplotlib` `Seaborn` for generating performance visualizations and statistical analysis within statistics.ipynb.
+* `NumPy` `Pandas` for matrix operations and structured data handling
+* `Scikit-learn` utilised for KFold cross-validation, MinMaxScaler preprocessing, and evaluation metrics (MAE, MSE, R2)
+* `h5py` for loading and managing large-scale biological datasets stored in HDF5 format
+* `tqdm` provides progress bars for long-running Nested Cross-Validation loops
+* `Matplotlib` `Seaborn` for generating performance visualizations and statistical analysis within statistics.pdf
 
-To install these, one can use the provided requirements.txt: `pip install -r requirements.txt`
+To install these, one can use the provided requirements.txt: `pip install -r requirements.txt`.
 
 Factorisation machine implementation:
-* `LibFM` The core C++ engine for factorization machines, must be compiled and available in system's PATH ([Source](https://github.com/srendle/libfm)).
-* `pywFM` A Python wrapper used to interface with the LibFM executable ([Source](https://github.com/jfloff/pywFM?tab=readme-ov-file)).
-* `RLScore` Used for the C-index calculation, which is the primary metric for ranking-based DTI prediction ([Source](https://github.com/aatapa/RLScore)).
+* `LibFM` The core C++ engine for factorization machines, must be compiled and available in system's PATH ([Source](https://github.com/srendle/libfm))
+* `pywFM` A Python wrapper used to interface with the LibFM executable ([Source](https://github.com/jfloff/pywFM?tab=readme-ov-file))
+* `RLScore` Used for the C-index calculation, which is the primary metric for ranking-based DTI prediction ([Source](https://github.com/aatapa/RLScore))
 
 ## Configuration
 
@@ -149,12 +149,12 @@ Run all experiments automatically:
 python fmloop.py
 ```
 
-Save predicted interaction values (Output: `Results/predictions_[file_name].csv`):
+Save predicted interaction values (output: `Results/predictions_[file_name].csv`):
 ```bash
 python fmpredictions.py [dataset] [feature_option] [file_name]
 ```
 
-Save trained model parameters (Output: `Results/weights_[file_name].json`):
+Save trained model parameters (output: `Results/weights_[file_name].json`):
 ```bash
 python fmweights.py [dataset] [feature_option] [file_name]
 ```
@@ -167,7 +167,7 @@ python fmweights.py [dataset] [feature_option] [file_name]
 ├── fm.py               # Main execution script
 ├── fmloop.py           # Automated experiment runner
 ├── settings.py         # Hyperparameter configurations
-└── statistics.ipynb    # Visualisation and analysis
+└── statistics.pdf      # Visualisation and analysis
 ```
 
 ## License
